@@ -1,0 +1,164 @@
+//登录
+mysql -u root -p
+
+//查询所有数据库
+show databases
+
+//删除指定数据库
+drop database 名称
+
+//创建数据库
+create database 名称
+
+//恢复数据库
+source 路径+名称
+
+//备份整个数据库
+mysqldump -u root -p -B 数据库名称（可以多个） > 路径+xxx.sql
+
+//备份表
+mysqldump -u root -p 数据库名称 表1 表2（等） > 路径+xxx.sql
+
+//创建表
+create table 表名(
+	`name`  VARCHAR(255)   not null     default(修改默认值),
+	`age`   INT  not null   default(修改默认值),
+	`birthday` VARCHAR(255)  not null  default(修改默认值)
+)CHARACTER SET utf8  COLLATE utf8_bin ENGINE MYISAM;
+
+//查询表
+select * from 表名
+
+//添加字段
+insert into 表名 values(xxx,xxx,xxx),(xxx,xxx,xxx),(xxx,xxx,xxx),(xxx,xxx,xxx);
+
+insert into 表名(指定字段) values(xxx,xxx),(xxx,xxx),(xxx,xxx),(xxx,xxx),(xxx,xxx);
+
+//修改表名
+rename table 表名 to 新表名
+
+//添加列
+alter table 表名
+add 列名 类型
+
+//修改列
+alter table 表名
+modify 列名 new_datatype
+
+alter table 表名
+change 原名 新名 datatype
+
+//删除列
+alter table 表名
+drop 列名
+
+//查看表结构
+desc 表名
+
+//修改字符集
+alter table 表名 character set 目标字符集
+
+//修改数据
+UPDATE shopchart 
+	SET price=999 WHERE goods_name='tomato';
+
+//删除数据
+delete from 表名
+    where 字段名=xxxx;
+
+//删除表
+drop table 表名
+
+//查询数据
+select 字段，字段  from 表名
+
+SELECT *,(chinese+math+english) AS total FROM student           //数学成绩小于语文成绩并且姓张
+    	WHERE chinese>math AND `name` LIKE '张%'
+
+SELECT *,(chinese+math+english) AS total FROM student
+	WHERE math BETWEEN 80 AND 90
+
+SELECT *,(chinese+math+english) AS total FROM student
+	WHERE math in (80,81,82)
+
+//去掉重复数据（查询出来的数据，行内每个数据都相同才去重）
+select distinct * from 表名
+
+//对数据筛选排序
+SELECT *,(chinese+math+english) AS total FROM student
+	WHERE (chinese+math+english)>100
+	ORDER BY total DESC;
+
+//使用统计函数
+SELECT	COUNT(*) FROM student
+	WHERE math>=90
+
+SELECT	SUM(math)/COUNT(*) AS '数学平均分' FROM student
+
+SELECT	AVG(math+chinese+english) AS '平均分' FROM student
+
+//分组统计
+SELECT AVG(sal),MIN(sal),job FROM `emp`
+	GROUP BY `job`
+
+SELECT AVG(sal) AS '平均工资',deptno FROM `emp`
+	GROUP BY `deptno` HAVING AVG(sal)<2000;
+
+//自连接
+SELECT worker.`ename` AS 员工,boss.`ename` AS 上级
+	FROM emp worker,emp boss
+	WHERE worker.mgr=boss.empno
+
+//单行子查询
+SELECT ename
+	FROM emp
+	WHERE emp.`deptno`=(SELECT deptno
+				FROM emp
+				WHERE ename='SMITH') AND emp.ename != 'SMITH'
+
+//多行子查询
+SELECT ename,job,sal,deptno FROM emp
+	WHERE emp.job IN (SELECT job FROM emp
+				WHERE deptno=10)
+
+//多列子查询
+
+SELECT ename,job,deptno FROM emp
+	WHERE (job,deptno)=(SELECT job,deptno FROM emp
+				WHERE ename='SMITH')
+
+//蠕虫复制
+insert into tablename  select * from tablename
+
+//外键
+外键指向表的字段必须是主键或unique
+foreign key (从字段) references 主表（主字段）
+
+//查询索引
+show indexes from 表名
+
+//添加唯一索引
+create unique index 索引名 on 表名（列名）
+
+//添加普通索引
+create index 索引名 on 表名（列名）
+
+alert table 表名 add index 索引名(列名)
+
+//四种隔离级别
+读未提交READ UNCOMMITTED
+读提交 READ COMMITTED
+可重复读REPEATABLE READ
+串行化SERIALIZABLE
+
+//修改存储引擎
+alter table '表名' engine=存储引擎
+
+//查看当前用户拥有的权限
+SHOW GRANTS FOR 'nepune'@'localhost';
+
+//改密码
+SET PASSWORD FOR  'nepune'@'localhost'=PASSWORD('135')
+
+//group_concat
+LeetCode1484
